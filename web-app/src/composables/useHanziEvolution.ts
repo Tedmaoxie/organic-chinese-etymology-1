@@ -68,6 +68,12 @@ export function useHanziEvolution({ char, container }: UseHanziEvolutionOptions)
       const pScale = comp.scalePhonetic || 0.65;
       radicalTransform = `translate(-10, 10) scale(${rScale})`; 
       phoneticTransform = `translate(37, 10) scale(${pScale})`;
+    } else if (comp.layout === 'top-bottom') {
+      const rScale = comp.scaleRadical || 0.55;
+      const pScale = comp.scalePhonetic || 0.75;
+      // 艹在上方，本在下方
+      radicalTransform = `translate(22, 5) scale(${rScale})`; 
+      phoneticTransform = `translate(12, 30) scale(${pScale})`;
     }
     
     return {
@@ -91,10 +97,18 @@ export function useHanziEvolution({ char, container }: UseHanziEvolutionOptions)
   const initWriter = () => {
     if (!container.value || !char.value) return;
     
-    if (writer && char.value === (writer as any)._character) {
+    const chars = Array.from(char.value.trim());
+    const pChar = chars[0];
+    const fallbackChar = chars[chars.length - 1];
+    if (!pChar) return;
+
+    // 如果当前已有 writer 且字符相同，则直接播放动画，不再重新创建
+    if (writer && (writer as any)._character === pChar) {
+      writer.animateCharacter();
       return;
     }
     
+    // 如果字符不同，销毁旧的渲染内容
     if (writer) {
       writer.cancelQuiz();
       writer = null;
@@ -103,11 +117,6 @@ export function useHanziEvolution({ char, container }: UseHanziEvolutionOptions)
       container.value.innerHTML = '';
     }
 
-    const chars = Array.from(char.value.trim());
-    const pChar = chars[0];
-    const fallbackChar = chars[chars.length - 1];
-    if (!pChar) return;
-    
     // Calculate size dynamically but safely
     const size = Math.min(180, Math.max(140, Math.floor(window.innerHeight * 0.2)));
 
@@ -117,8 +126,8 @@ export function useHanziEvolution({ char, container }: UseHanziEvolutionOptions)
         height: size,
         padding: 5,
         showOutline: true,
-        strokeAnimationSpeed: 1, // Slower speed for more natural feel
-        delayBetweenStrokes: 200, // Longer pause between strokes
+        strokeAnimationSpeed: 2.5, // 提高动画速度 (从 1 提升到 2.5)
+        delayBetweenStrokes: 100, // 减少笔画间的停顿 (从 200 降低到 100)
         strokeColor: '#00aaff',
         radicalColor: '#ffaa00',
       });
@@ -130,8 +139,8 @@ export function useHanziEvolution({ char, container }: UseHanziEvolutionOptions)
         height: size,
         padding: 5,
         showOutline: true,
-        strokeAnimationSpeed: 1, // Slower speed for more natural feel
-        delayBetweenStrokes: 200, // Longer pause between strokes
+        strokeAnimationSpeed: 2.5, // 提高动画速度
+        delayBetweenStrokes: 100, // 减少笔画间的停顿
         strokeColor: '#00aaff',
         radicalColor: '#ffaa00',
       });

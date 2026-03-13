@@ -181,8 +181,9 @@ onBeforeUnmount(() => {
         </div>
 
         <div v-if="activeTab === 'history'" class="tab-content history-timeline">
-          <div class="timeline-container">
-            <div v-for="event in currentGroup.history" :key="event.year" class="timeline-item">
+          <!-- 添加 key 确保切换官能团时重新渲染，防止数据残留 -->
+          <div class="timeline-container" :key="currentGroup.id">
+            <div v-for="event in currentGroup.history" :key="`${event.year}-${event.author}`" class="timeline-item">
               <div class="timeline-marker">
                 <div class="marker-node"></div>
                 <div class="marker-line"></div>

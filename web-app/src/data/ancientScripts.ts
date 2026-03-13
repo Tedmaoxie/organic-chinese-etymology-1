@@ -45,6 +45,20 @@ export const ancientScripts: Record<string, AncientScript> = {
     bronze: 'M35,20 Q15,50 35,90 L65,90 Q45,50 65,20 Z M40,45 L60,45 M40,65 L60,65',
     seal: 'M30,20 L30,90 L70,90 L70,20 Q50,10 30,20 M30,45 L70,45 M30,70 L70,70'
   },
+  '艹': {
+    char: '艹',
+    // 两株嫩草
+    oracle: 'M25,60 L25,30 M25,30 L15,20 M25,30 L35,20 M75,60 L75,30 M75,30 L65,20 M75,30 L85,20',
+    bronze: 'M25,65 Q25,35 25,30 Q25,30 15,20 Q25,30 35,20 M75,65 Q75,35 75,30 Q75,30 65,20 Q75,30 85,20',
+    seal: 'M30,70 L30,40 Q30,40 20,30 M30,40 Q30,40 40,30 M70,70 L70,40 Q70,40 60,30 M70,40 Q70,40 80,30'
+  },
+  '本': {
+    char: '本',
+    // 树木下方加一横表示根部
+    oracle: 'M50,10 L50,80 M20,50 L80,50 M50,50 L20,80 M50,50 L80,80 M35,85 L65,85',
+    bronze: 'M50,10 L50,85 M20,55 L80,55 M50,55 L25,85 M50,55 L75,85 M30,90 L70,90',
+    seal: 'M50,10 L50,80 M20,50 L80,50 M50,50 L20,80 M50,50 L80,80 M30,85 L70,85'
+  },
   // --- Phonetics / Components ---
   '𢀖': {
     char: '𢀖',
@@ -170,13 +184,15 @@ export const combinedCompositions: Record<string, CombinedScript> = {
   '酰': { radical: '酉', phonetic: '先', layout: 'left-right' },
   '羟': { radical: '羊', phonetic: '𢀖', layout: 'left-right' }, // 新增
   '羰': { radical: '羊', phonetic: '炭', layout: 'left-right' }, // 新增
+  '苯': { radical: '艹', phonetic: '本', layout: 'top-bottom' }, // 新增
 };
 
 export const getRadical = (char: string): string => {
   if (['烷', '烯', '炔', '烃', '火', '炭'].includes(char)) return '火';
   if (['醇', '酚', '醚', '醛', '酮', '酯', '酸', '酰', '酉'].includes(char)) return '酉';
   if (['氢', '氧', '氮', '氯', '气'].includes(char)) return '气';
-  if (['羟', '羧', '羊'].includes(char)) return '羊';
+  if (['羟', '羧', '羊', '羰'].includes(char)) return '羊';
   if (['胺', '月', '肉', '脂', '胱', '脏'].includes(char)) return '月';
+  if (['苯', '艹'].includes(char)) return '艹';
   return '';
 };
