@@ -17,6 +17,7 @@ dist-ssr/
 
 # Project specific
 *.pdf
+UI_PROMPT_GUIDE.md
 .trae/
 web-app/node_modules/
 web-app/dist/
