@@ -1,0 +1,40 @@
+
+@import './variables.scss';
+
+:root {
+  font-family: 'Noto Serif SC', 'Songti SC', serif;
+  font-weight: 400;
+  font-size: 14px; // Reduce base font size to make UI more compact (approx 87.5% of standard)
+  color-scheme: dark;
+  color: $color-text-primary;
+  background-color: $color-bg-start;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+  overflow: hidden; // Prevent scroll unless necessary
+}
+
+#app {
+  width: 100%;
+  height: 100vh;
+  position: relative;
+}
+
+// Global utility classes
+.glass-panel {
+  @include glass-panel;
+}
+
+.text-accent {
+  color: $color-text-accent;
+  @include text-glow($color-text-accent);
+}

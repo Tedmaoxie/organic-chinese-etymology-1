@@ -1,0 +1,46 @@
+
+// Color System
+$color-bg-start: #050a15;
+$color-bg-end: #0a1f3d;
+
+$color-text-primary: #ffffff;
+$color-text-secondary: #a0a0a0;
+$color-text-accent: #00aaff;
+
+$color-border-glass: rgba(255, 255, 255, 0.1);
+$color-bg-glass: rgba(255, 255, 255, 0.03); // Slightly more transparent
+$color-bg-glass-hover: rgba(255, 255, 255, 0.08);
+
+// Functional Group Colors
+$color-alkane: #ffffff; // 烷
+$color-alkene: #ff5555; // 烯
+$color-alkyne: #ffaa00; // 炔
+$color-alcohol: #00ffaa; // 醇
+$color-aldehyde: #ffff00; // 醛
+$color-ketone: #aa00ff; // 酮
+$color-ether: #00aaff; // 醚
+$color-ester: #ff00ff; // 酯
+
+// Mixins
+@mixin glass-panel {
+  background: $color-bg-glass;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid $color-border-glass;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3); // Deeper shadow
+  border-radius: 16px; // More rounded
+}
+
+@mixin glass-panel-hover {
+  background: $color-bg-glass-hover;
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.05);
+}
+
+@mixin text-glow($color) {
+  text-shadow: 0 0 10px rgba($color, 0.5), 0 0 20px rgba($color, 0.3);
+}
+
+// Typography
+$font-family-serif: "Noto Serif SC", serif;
+$font-family-sans: "Inter", system-ui, sans-serif;
