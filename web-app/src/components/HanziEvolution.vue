@@ -259,19 +259,20 @@ onBeforeUnmount(() => {
 .btn {
   background: transparent;
   border: 1px solid transparent;
-  padding: 0.6rem 1.2rem;
+  padding: 0.6rem 1.4rem; // Slightly wider padding
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.3s;
-  font-size: 0.9rem;
+  font-size: 1.1rem; // Increased font size
+  font-weight: 500; // Slightly bolder
   font-family: inherit;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.6rem;
   backdrop-filter: blur(4px);
   
   .icon {
-    font-size: 1.1em;
+    font-size: 1.2em; // Larger icon
   }
 
   &:disabled {

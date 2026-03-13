@@ -181,12 +181,25 @@ onBeforeUnmount(() => {
         </div>
 
         <div v-if="activeTab === 'history'" class="tab-content history-timeline">
-          <div v-for="event in currentGroup.history" :key="event.year" class="timeline-item">
-            <div class="year">{{ event.year }}</div>
-            <div class="event-details">
-              <h4>{{ event.author }}</h4>
-              <p class="name-evolution">{{ event.name }}</p>
-              <p class="desc">{{ event.description }}</p>
+          <div class="timeline-container">
+            <div v-for="event in currentGroup.history" :key="event.year" class="timeline-item">
+              <div class="timeline-marker">
+                <div class="marker-node"></div>
+                <div class="marker-line"></div>
+              </div>
+              <div class="timeline-content">
+                <div class="timeline-header">
+                  <span class="year-badge">{{ event.year }}</span>
+                  <span class="author-tag">{{ event.author }}</span>
+                </div>
+                <div class="evolution-body">
+                  <div class="name-display">
+                    <span class="label">译名：</span>
+                    <span class="value">{{ event.name }}</span>
+                  </div>
+                  <p class="event-desc">{{ event.description }}</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -365,23 +378,27 @@ onBeforeUnmount(() => {
   .tabs {
     display: flex;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    margin-bottom: 0.6rem; // Reduced margin
+    margin-bottom: 0.2rem; // Further reduced margin
     flex-shrink: 0;
+    min-height: 2.2rem; // Compact height
     
     button {
       background: transparent;
       border: none;
       color: $color-text-secondary;
-      padding: 0.5rem; // Reduced padding
-      font-size: 0.85rem; // Reduced font size
+      padding: 0.3rem; // Compact padding
+      font-size: 1.15rem; // Significantly increased font size
+      font-weight: 500; // Slightly bolder
       cursor: pointer;
       position: relative;
       flex: 1;
       text-align: center;
+      line-height: 1.2;
       
       &.active {
         color: $color-text-primary;
         font-weight: bold;
+        font-size: 1.2rem; // Even larger for active tab
         
         &::after {
           content: '';
@@ -389,7 +406,7 @@ onBeforeUnmount(() => {
           bottom: -1px;
           left: 0;
           width: 100%;
-          height: 2px;
+          height: 3px; // Thicker underline
           background: $color-text-accent;
         }
       }
@@ -422,88 +439,162 @@ onBeforeUnmount(() => {
     }
     
     &.history-timeline {
-      gap: 1rem; // Reduced gap
-      padding-left: 0.6rem; // Reduced padding
-      border-left: 2px solid rgba(255, 255, 255, 0.1);
-      margin-left: 0.4rem;
-    
-    .timeline-item {
-      position: relative;
+      padding: 1.5rem 0.5rem;
+      overflow-y: auto;
       
-      &::before {
-        content: '';
-        position: absolute;
-        left: -1.1rem; // Adjusted align
-        top: 0.3rem;
-        width: 6px; // Smaller dot
-        height: 6px; // Smaller dot
-        background: $color-text-accent;
-        border-radius: 50%;
-        box-shadow: 0 0 6px $color-text-accent;
+      .timeline-container {
+        display: flex;
+        flex-direction: column;
+        gap: 0; // Each item contains its line
       }
       
-      .year {
-        font-size: 0.75rem; // Reduced font size
-        color: $color-text-secondary;
-        margin-bottom: 0.1rem;
+      .timeline-item {
+        display: flex;
+        gap: 1.2rem;
+        min-height: 100px;
+        
+        &:last-child {
+          .marker-line {
+            display: none;
+          }
+        }
       }
       
-      .event-details {
-        h4 {
-          margin: 0;
-          font-size: 1.2rem; // Further increased
+      .timeline-marker {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 20px;
+        flex-shrink: 0;
+        
+        .marker-node {
+          width: 14px;
+          height: 14px;
+          border-radius: 50%;
+          background: $color-bg-start;
+          border: 2px solid $color-text-accent;
+          box-shadow: 0 0 10px rgba($color-text-accent, 0.5);
+          z-index: 2;
         }
         
-        .name-evolution {
-          font-size: 1.3rem; // Further increased
-          font-weight: bold;
-          color: $color-text-accent;
-          margin: 0.1rem 0;
+        .marker-line {
+          width: 2px;
+          flex: 1;
+          background: linear-gradient(
+            to bottom,
+            $color-text-accent,
+            rgba($color-text-accent, 0.1)
+          );
+          opacity: 0.3;
+          margin-top: -2px;
+        }
+      }
+      
+      .timeline-content {
+        flex: 1;
+        padding-bottom: 2rem;
+        
+        .timeline-header {
+          display: flex;
+          align-items: center;
+          gap: 0.8rem;
+          margin-bottom: 0.6rem;
+          
+          .year-badge {
+            background: rgba($color-text-accent, 0.15);
+            color: $color-text-accent;
+            padding: 0.1rem 0.6rem;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            border: 1px solid rgba($color-text-accent, 0.3);
+          }
+          
+          .author-tag {
+            color: $color-text-primary;
+            font-size: 1rem;
+            font-weight: 500;
+          }
         }
         
-        .desc {
-          font-size: 1.05rem; // Further increased
-          color: $color-text-secondary;
-          line-height: 1.4; 
+        .evolution-body {
+          background: rgba(255, 255, 255, 0.03);
+          border: 1px solid rgba(255, 255, 255, 0.05);
+          border-radius: 8px;
+          padding: 0.8rem;
+          backdrop-filter: blur(5px);
+          
+          .name-display {
+            margin-bottom: 0.4rem;
+            
+            .label {
+              color: $color-text-secondary;
+              font-size: 0.85rem;
+            }
+            
+            .value {
+              color: $color-text-accent;
+              font-size: 1.4rem;
+              font-weight: bold;
+              font-family: 'Noto Serif SC', serif;
+            }
+          }
+          
+          .event-desc {
+            color: $color-text-secondary;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin: 0;
+          }
         }
       }
     }
-  }
 
   &.etymology-content {
+    display: flex;
+    flex-direction: column;
+    
     .hanzi-display {
       flex-shrink: 0;
-      margin-bottom: 0.5rem; // Reduced margin
+      margin-bottom: 0.2rem; // Minimized margin
       display: flex;
       justify-content: center;
-      min-height: 140px; // Reduced height
-      transform: scale(0.8); // Scale down the hanzi viewer
+      min-height: 120px; // Further reduced height reservation
+      height: 120px;
+      transform: scale(0.75); // Slightly smaller to save space
       transform-origin: center center;
+      overflow: visible; // Allow SVG to overflow bounds slightly if needed
     }
 
     .etymology-text {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end; // Align content to bottom
       text-align: justify;
+      overflow-y: hidden; // Try to avoid scrollbar if possible
       
       h3 {
         color: $color-text-accent;
-        margin-bottom: 0.2rem;
+        margin-bottom: 0.1rem;
         margin-top: 0;
-        font-size: 1.1rem; // Increased font size
+        font-size: 1.15rem; // Good size
+        line-height: 1.2;
       }
       
       p {
-        line-height: 1.4; // Slightly increased line height
-        margin-bottom: 0.4rem;
-        font-size: 0.95rem; // Increased font size
+        line-height: 1.35; // Tight but readable
+        margin-bottom: 0.3rem;
+        font-size: 1rem; // Large readable text
       }
     
       cite {
         display: block;
         text-align: right;
-        font-size: 0.8rem; // Increased font size
+        font-size: 0.85rem; // Readable citation
         color: $color-text-secondary;
         font-style: italic;
-        margin-top: 0.2rem;
+        margin-top: 0.1rem;
       }
     }
   }

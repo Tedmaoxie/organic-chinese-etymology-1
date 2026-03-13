@@ -32,7 +32,7 @@ onBeforeUnmount(() => {
     
     <header class="glass-header">
       <div class="header-content">
-        <div class="logo">Organic Etymology</div>
+        <div class="logo">AI赋能高中化学教学系列by实验中学</div>
         <nav>
           <router-link to="/">Home</router-link>
           <router-link to="/about">About</router-link>
@@ -50,7 +50,7 @@ onBeforeUnmount(() => {
 
     <footer class="glass-footer">
       <div class="footer-content">
-        <p>&copy; 2026 Organic Chinese Etymology Lab</p>
+        <p>&copy; 2026 AI赋能高中化学教学系列by实验中学</p>
       </div>
     </footer>
   </div>

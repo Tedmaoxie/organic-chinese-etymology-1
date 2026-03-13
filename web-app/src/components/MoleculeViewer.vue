@@ -197,7 +197,7 @@ onMounted(() => {
   scene.add(ambientLight, dirLight, rimLight)
 
   camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100)
-  camera.position.set(0, 0, 5)
+  camera.position.set(0, 0, 8) // Moved camera further back (from 5 to 8) to fit larger molecules like Benzene
 
   renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true })
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
