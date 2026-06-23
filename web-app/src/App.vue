@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted } from 'vue'
 import AuroraBackground from './components/AuroraBackground.vue'
+import { useThemeStore } from './stores/theme'
+
+const themeStore = useThemeStore()
 
 const stopBackgroundActivities = () => {
   window.speechSynthesis.cancel()
@@ -36,6 +39,10 @@ onBeforeUnmount(() => {
         <nav>
           <router-link to="/">Home</router-link>
           <router-link to="/about">About</router-link>
+          <button @click="themeStore.toggleTheme" class="theme-toggle" :title="themeStore.isLightMode ? '切换到暗色模式' : '切换到亮色模式'">
+            <span v-if="themeStore.isLightMode">🌙</span>
+            <span v-else>☀️</span>
+          </button>
         </nav>
       </div>
     </header>
@@ -98,11 +105,43 @@ onBeforeUnmount(() => {
     @include text-glow($color-text-accent);
   }
 
-  nav {
-    display: flex;
-    gap: 1.5rem;
+    nav {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center; // Ensure vertical alignment
 
-    a {
+      .theme-toggle {
+        background: rgba(var(--color-text-primary-rgb, 128, 128, 128), 0.1);
+        border: 1px solid var(--color-border-glass);
+        color: $color-text-primary;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        padding: 0;
+
+        &:hover {
+          background: rgba(255, 255, 255, 0.2);
+          transform: rotate(15deg) scale(1.1);
+        }
+      }
+      
+      :root.light-mode & .theme-toggle {
+        background: rgba(0, 0, 0, 0.05);
+        border-color: rgba(0, 0, 0, 0.1);
+        color: #333;
+        
+        &:hover {
+          background: rgba(0, 0, 0, 0.1);
+        }
+      }
+
+      a {
       color: $color-text-secondary;
       text-decoration: none;
       font-size: 0.95rem;

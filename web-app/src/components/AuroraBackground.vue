@@ -1,9 +1,11 @@
 
 <script setup lang="ts">
-import { onBeforeUnmount, onMounted, ref } from 'vue'
+import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import * as THREE from 'three'
+import { useThemeStore } from '../stores/theme'
 
 const container = ref<HTMLDivElement | null>(null)
+const themeStore = useThemeStore()
 
 onMounted(() => {
   if (!container.value) return
@@ -29,14 +31,22 @@ onMounted(() => {
 
   const particlesMaterial = new THREE.PointsMaterial({
     size: 0.02,
-    color: 0x00aaff,
+    color: themeStore.isLightMode ? 0x64748b : 0x00aaff,
     transparent: true,
-    opacity: 0.8,
-    blending: THREE.AdditiveBlending
+    opacity: themeStore.isLightMode ? 0.3 : 0.8,
+    blending: themeStore.isLightMode ? THREE.NormalBlending : THREE.AdditiveBlending
   })
 
   const particles = new THREE.Points(particlesGeometry, particlesMaterial)
   scene.add(particles)
+
+  // Watch for theme changes to update particles
+  watch(() => themeStore.isLightMode, (isLight) => {
+    particlesMaterial.color.setHex(isLight ? 0x64748b : 0x00aaff)
+    particlesMaterial.opacity = isLight ? 0.3 : 0.8
+    particlesMaterial.blending = isLight ? THREE.NormalBlending : THREE.AdditiveBlending
+    particlesMaterial.needsUpdate = true
+  })
 
   let running = false
 
@@ -117,8 +127,9 @@ onMounted(() => {
   width: 100%;
   height: 100%;
   z-index: -1;
-  background: #050a15; // Fallback
+  background: var(--color-bg-start); // Use variable
   overflow: hidden;
+  transition: background 0.5s ease;
 }
 
 .gradient-overlay {
@@ -127,9 +138,10 @@ onMounted(() => {
   left: 0;
   width: 100%;
   height: 100%;
-  background: radial-gradient(circle at 50% 50%, #0a1f3d 0%, #050a15 100%);
+  background: radial-gradient(circle at 50% 50%, var(--color-bg-end) 0%, var(--color-bg-start) 100%);
   opacity: 0.8;
   mix-blend-mode: overlay;
+  transition: background 0.5s ease;
 }
 
 .particle-container {

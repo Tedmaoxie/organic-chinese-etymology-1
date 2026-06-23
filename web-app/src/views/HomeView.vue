@@ -62,12 +62,12 @@ const getCardStyle = (index: number, total: number, rotation: number) => {
   const pointerEvents: 'auto' | 'none' = 'auto';
 
   // 增加border颜色动态变化，防止白边消失
-  const borderColor = isFront ? 'rgba(255, 255, 255, 0.5)' : 'rgba(255, 255, 255, 0.2)';
+  const borderColor = isFront ? 'var(--color-border-glass)' : 'rgba(128, 128, 128, 0.1)';
 
   // 增加box-shadow，增强可见性
   const boxShadow = isFront 
-    ? '0 8px 32px 0 rgba(31, 38, 135, 0.37)' 
-    : '0 4px 16px 0 rgba(31, 38, 135, 0.1)';
+    ? '0 8px 32px 0 var(--glass-shadow)' 
+    : '0 4px 16px 0 var(--glass-shadow)';
 
   return {
     transform: `rotateY(${currentAngle}deg) translateZ(${radius}px)`,
@@ -363,7 +363,7 @@ const selectGroup = (id: string) => {
       font-size: 2.5rem;
       font-weight: 700;
       margin-bottom: 0.5rem;
-      background: linear-gradient(to right, #fff, $color-text-accent);
+      background: linear-gradient(to right, $color-text-primary, $color-text-accent);
       -webkit-background-clip: text;
       background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -576,7 +576,7 @@ const selectGroup = (id: string) => {
     font-size: 0.9rem;
     color: $color-text-secondary;
     font-family: 'Courier New', monospace;
-    background: rgba(0, 0, 0, 0.3);
+    background: var(--info-bg);
     padding: 0.1rem 0.4rem;
     border-radius: 4px;
   }

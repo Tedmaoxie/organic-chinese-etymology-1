@@ -5,12 +5,14 @@ import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import { getMoleculeData } from '../utils/moleculeBuilder'
 import type { MoleculeData } from '../utils/moleculeBuilder'
+import { useThemeStore } from '../stores/theme'
 
 const props = defineProps<{
   groupId: string
 }>()
 
 const container = ref<HTMLDivElement | null>(null)
+const themeStore = useThemeStore()
 
 let scene: THREE.Scene
 let camera: THREE.PerspectiveCamera
@@ -20,6 +22,11 @@ let moleculeGroup: THREE.Group
 let resizeObserver: ResizeObserver | null = null
 let running = false
 const mouse = new THREE.Vector2()
+
+// Lights
+let ambientLight: THREE.AmbientLight
+let dirLight: THREE.DirectionalLight
+let rimLight: THREE.SpotLight
 
 const createAtomMesh = (radius: number, color: number) => {
   const geometry = new THREE.SphereGeometry(radius, 32, 32)
@@ -184,13 +191,23 @@ watch(
   }
 )
 
+// Watch for theme changes to update lights
+watch(() => themeStore.isLightMode, (isLight) => {
+  if (ambientLight) ambientLight.intensity = isLight ? 3 : 2
+  if (dirLight) dirLight.intensity = isLight ? 3 : 2
+  if (rimLight) {
+    rimLight.color.setHex(isLight ? 0x0088cc : 0x00aaff)
+    rimLight.intensity = isLight ? 3 : 5
+  }
+})
+
 onMounted(() => {
   if (!container.value) return
 
   scene = new THREE.Scene()
-  const ambientLight = new THREE.AmbientLight(0x404040, 2)
-  const dirLight = new THREE.DirectionalLight(0xffffff, 2)
-  const rimLight = new THREE.SpotLight(0x00aaff, 5)
+  ambientLight = new THREE.AmbientLight(0x404040, themeStore.isLightMode ? 3 : 2)
+  dirLight = new THREE.DirectionalLight(0xffffff, themeStore.isLightMode ? 3 : 2)
+  rimLight = new THREE.SpotLight(themeStore.isLightMode ? 0x0088cc : 0x00aaff, themeStore.isLightMode ? 3 : 5)
   dirLight.position.set(5, 5, 5)
   rimLight.position.set(-5, 5, -5)
   rimLight.lookAt(0, 0, 0)

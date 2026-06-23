@@ -61,7 +61,7 @@ onBeforeUnmount(() => {
               v-if="!isCombined"
               :d="currentSvgPath" 
               fill="none" 
-              stroke="#ffaa00" 
+              stroke="var(--ancient-stroke-1)" 
               stroke-width="3" 
               stroke-linecap="round" 
               stroke-linejoin="round"
@@ -75,7 +75,7 @@ onBeforeUnmount(() => {
                 :d="combinedPaths.radical" 
                 :transform="combinedPaths.radicalTransform"
                 fill="none" 
-                stroke="#ffaa00" 
+                stroke="var(--ancient-stroke-1)" 
                 stroke-width="3" 
                 stroke-linecap="round" 
                 stroke-linejoin="round"
@@ -86,7 +86,7 @@ onBeforeUnmount(() => {
                 :d="combinedPaths.phonetic" 
                 :transform="combinedPaths.phoneticTransform"
                 fill="none" 
-                stroke="#00aaff" 
+                stroke="var(--ancient-stroke-2)" 
                 stroke-width="3" 
                 stroke-linecap="round" 
                 stroke-linejoin="round"
@@ -183,7 +183,8 @@ onBeforeUnmount(() => {
   .ancient-svg {
     width: 90%;
     height: 90%;
-    filter: drop-shadow(0 0 8px rgba(255, 170, 0, 0.4));
+    filter: drop-shadow(0 0 8px var(--ancient-stroke-1));
+    opacity: 0.9;
     
     .draw-path {
       stroke-dasharray: 1500; // Increased safety margin
@@ -241,7 +242,7 @@ onBeforeUnmount(() => {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    background: rgba(0, 0, 0, 0.2);
+    background: var(--info-bg);
     padding: 0.5rem 1rem;
     border-radius: 20px;
     

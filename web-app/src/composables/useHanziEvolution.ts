@@ -1,6 +1,7 @@
 import { ref, computed, watch, nextTick, type Ref } from 'vue';
 import { ancientScripts, getRadical, combinedCompositions, type CombinedScript } from '../data/ancientScripts';
 import HanziWriter from 'hanzi-writer';
+import { useThemeStore } from '../stores/theme';
 
 export interface UseHanziEvolutionOptions {
   char: Ref<string>;
@@ -13,6 +14,7 @@ export function useHanziEvolution({ char, container }: UseHanziEvolutionOptions)
   const animationId = ref(0);
   let writer: HanziWriter | null = null;
   const replayKey = ref(0);
+  const themeStore = useThemeStore();
 
   const primaryChar = computed(() => {
     return Array.from(char.value.trim())[0] || '';
@@ -128,8 +130,9 @@ export function useHanziEvolution({ char, container }: UseHanziEvolutionOptions)
         showOutline: true,
         strokeAnimationSpeed: 2.5, // 提高动画速度 (从 1 提升到 2.5)
         delayBetweenStrokes: 100, // 减少笔画间的停顿 (从 200 降低到 100)
-        strokeColor: '#00aaff',
+        strokeColor: themeStore.isLightMode ? '#0088cc' : '#00aaff',
         radicalColor: '#ffaa00',
+        outlineColor: themeStore.isLightMode ? '#e2e8f0' : '#2d3748',
       });
       writer.animateCharacter();
     } catch {
@@ -141,8 +144,9 @@ export function useHanziEvolution({ char, container }: UseHanziEvolutionOptions)
         showOutline: true,
         strokeAnimationSpeed: 2.5, // 提高动画速度
         delayBetweenStrokes: 100, // 减少笔画间的停顿
-        strokeColor: '#00aaff',
+        strokeColor: themeStore.isLightMode ? '#0088cc' : '#00aaff',
         radicalColor: '#ffaa00',
+        outlineColor: themeStore.isLightMode ? '#e2e8f0' : '#2d3748',
       });
       writer.animateCharacter();
     }
@@ -203,6 +207,12 @@ export function useHanziEvolution({ char, container }: UseHanziEvolutionOptions)
       animationId.value++;
       isPlaying.value = false;
       currentStage.value = 'standard';
+      nextTick(() => initWriter());
+    }
+  });
+
+  watch(() => themeStore.isLightMode, () => {
+    if (currentStage.value === 'standard') {
       nextTick(() => initWriter());
     }
   });
